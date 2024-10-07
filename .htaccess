@@ -1,0 +1,40 @@
+# Enable rewrite engine
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Ensure that the base URL is correct
+  RewriteBase /
+
+  # Don't rewrite requests for files or directories
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Redirect everything else to index.html (Angular will handle routing)
+  RewriteRule ^.*$ /index.html [L]
+</IfModule>
+
+# Serve custom 404 error page (Optional)
+ErrorDocument 404 /index.html
+
+# Security headers (Optional for better security)
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+# Caching headers (Optional for better performance)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/pdf "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  ExpiresByType application/x-javascript "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
